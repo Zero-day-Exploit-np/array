@@ -75,6 +75,18 @@ struct Node * deleteAtIndex(struct Node * head, int index){
     return head;
 }
 
+struct Node * deleteAtValue(struct Node * head, int value){
+    struct Node * a = head;
+    struct Node * b = head->next;
+    while(b->data!=value){
+        a=a->next;
+        b=b->next;
+    }
+    a->next=b->next;
+    free(b);
+    return head;
+}
+
 int main(){
     struct Node *head;
     struct Node * a;
@@ -124,6 +136,12 @@ int main(){
     head=deleteAtIndex(head,1);
     display(head);
     printf("\n");
+
+    
+    head=deleteAtValue(head,2);
+    display(head);
+    printf("\n");
+
 
 return 0;
 }
