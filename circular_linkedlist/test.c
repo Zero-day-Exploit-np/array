@@ -29,6 +29,44 @@ struct Node * insertAtFirst(struct Node * head, int data){
         a->next=head;
         return a;    
 }
+
+
+struct Node * insertAtlast(struct Node * head, int data){
+    struct Node * a;
+    a=(struct Node*)malloc(sizeof(struct Node));
+    a->data=data;
+    struct Node * pre=head;
+            pre=pre->next;
+        
+        while(pre->next!=head){
+            pre=pre->next;
+        }
+        pre->next=a;
+
+        a->next=head;
+        return head;    
+}
+
+struct Node * insertAtmiddel(struct Node * head, int data, int index){
+    struct Node * a;
+    int count=0;
+    a=(struct Node*)malloc(sizeof(struct Node));
+    a->data=data;
+    struct Node * ptr=head;
+    struct Node * pre=head;
+        pre=pre->next;
+        while(count<index-1){
+            ptr=ptr->next;
+            pre=pre->next;
+            count++;
+        }
+
+        ptr->next=a;
+
+        a->next=pre;
+        return head;    
+}
+
 int main(){
      struct Node *head;
     struct Node *a;
@@ -61,6 +99,15 @@ int main(){
     printf(" \n");
 
     head=insertAtFirst(head, 0);
+    print(head);
+    printf(" \n");
+
+    
+    head=insertAtlast(head, 6);
+    print(head);
+    printf(" \n");
+
+    head=insertAtmiddel(head, 7,2);
     print(head);
     printf(" \n");
 
