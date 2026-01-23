@@ -49,16 +49,16 @@ void pop(struct stack *s)
     {
         int value = s->arr[s->top];
         s->top = s->top - 1;
-        printf("%d element has been pop\n",value);
+        printf("%d element has been pop\n", value);
     }
 }
 
 void print(struct stack *ptr)
 {
     printf("Element in stack:");
-    for (int i = 0; i < ptr->size; i++)
+    for (int i = 0; i < ptr->top + 1; i++)
     {
-        printf(" %d ", ptr->arr[ptr->size - i - 1]);
+        printf(" %d ", ptr->arr[ptr->top - i]);
     }
     printf("\n");
 }
