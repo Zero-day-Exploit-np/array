@@ -9,71 +9,95 @@ struct stack
     char *arr;
 };
 
-int isEmpty(struct stack *head)
+int isEmpty(struct stack *s)
 {
-    if (head->top == -1)
+    return s->top == -1;
+}
+
+int isFull(struct stack *s)
+{
+    return s->top == s->size - 1;
+}
+
+void push(struct stack *s, char data)
+{
+    if (isFull(s))
     {
-        return 1;
+        printf("Stack Overflow\n");
+        return;
     }
+    s->arr[++s->top] = data;
+}
+
+char pop(struct stack *s)
+{
+    if (isEmpty(s))
+    {
+        printf("Stack Underflow\n");
+        return '\0';
+    }
+    return s->arr[s->top--];
+}
+
+char stackTop(struct stack *s)
+{
+    return s->arr[s->top];
+}
+
+int precedence(char ch)
+{
+    if (ch == '*' || ch == '/')
+        return 3;
+    if (ch == '+' || ch == '-')
+        return 2;
     return 0;
 }
 
-int isFull(struct stack *head)
+int isOperator(char ch)
 {
-    if (head->top == head->size - 1)
-    {
-        return 1;
-    }
-    return 0;
+    return (ch == '+' || ch == '-' || ch == '*' || ch == '/');
 }
 
-struct stack *push(struct stack *head, char data)
+char *infixTopost(char *infix)
 {
-    if (isFull(head))
-    {
-        printf("Stack is full cannot push.\n");
-        return 0;
-    }
-    head->top++;
-    head->arr[head->top] = data;
-}
+    struct stack *s = (struct stack *)malloc(sizeof(struct stack));
+    s->size = strlen(infix);
+    s->top = -1;
+    s->arr = (char *)malloc(s->size);
 
-struct stack *pop(struct stack *head)
-{
-    if (isEmpty(head))
-    {
-        printf("Stack is empty cannot pop.\n");
-        return 0;
-    }
-    head->top--;
-}
-void print(struct stack *ptr)
-{
-    printf("Element in stack:");
-    for (int i = 0; i < ptr->top + 1; i++)
-    {
-        printf(" %c ", ptr->arr[ptr->top - i]);
-    }
-    printf("\n");
-}
-int main()
-{
-    struct stack *a = (struct stack *)malloc(sizeof(struct stack));
-    a->size = 10;
-    a->top = -1;
-    a->arr = (char *)malloc(a->size * sizeof(char));
+    char *postfix = (char *)malloc(strlen(infix) + 1);
 
-    char str[] = "1+2*5/7";
+    int i = 0, j = 0;
 
-    for (int i = 0; str[i] != '\0'; i++)
+    while (infix[i] != '\0')
     {
-        if (str[i] == '+' || str[i] == '*' || str[i] == '/')
+        if (!isOperator(infix[i]))
         {
-            push(a, str[i]);
-        }else{
-            printf(" %c ",str[i]);
+            postfix[j++] = infix[i++];
+        }
+        else
+        {
+            while (!isEmpty(s) &&
+                   precedence(infix[i]) <= precedence(stackTop(s)))
+            {
+                postfix[j++] = pop(s);
+            }
+            push(s, infix[i++]);
         }
     }
-    print(a);
+
+    while (!isEmpty(s))
+    {
+        postfix[j++] = pop(s);
+    }
+
+    postfix[j] = '\0';
+    return postfix;
+}
+
+int main()
+{
+    char *infix = "a+b-c/d";
+    printf("Postfix is: %s\n", infixTopost(infix));
     return 0;
 }
